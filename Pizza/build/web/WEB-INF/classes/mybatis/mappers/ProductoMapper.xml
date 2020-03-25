@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="Producto">
+    
+    <select id="getAllProductos" resultType="pojos.Productos">
+        SELECT
+            producto.idproducto,
+            producto.nombre,
+            producto.precio
+            FROM producto
+    </select> 
+    
+    <select id="getProductoDetalle" resultType="pojos.Producto" parameterType="int">
+        SELECT 
+        producto.nombre,
+        producto.precio,
+        producto.descripcion,
+        producto.restricciones
+        FROM producto
+        WHERE producto.idproducto = #{id}
+    </select>
+    
+    <select id="getPedidoDetalle" resultType="pojos.Pedido" parameterType="int">
+        SELECT 
+        producto.nombre,
+        pedido.fecha,
+        pedido.cantidad,
+        pedido.total
+        FROM pedido
+        INNER JOIN producto
+        ON pedido.idproducto = producto.idproducto and pedido.idpedido = #{id}
+    </select>
+    
+     <select id="getPedido" resultType="pojos.Pedidos" parameterType="int">
+        SELECT 
+        pedido.fecha,
+        pedido.idpedido,
+        pedido.total
+        FROM pedido
+        WHERE pedido.idusuario = #{id}
+    </select>
+    
+    <select id="getID" resultType="pojos.Mensaje">
+        SELECT
+            MAX(usuario.idusuario) 
+            AS idusuario 
+            FROM usuario
+    </select>
+    
+    <select id="getUltimo" resultType="int">
+        SELECT
+            MAX(usuario.idusuario) 
+            AS idusuario 
+            FROM usuario
+    </select>
+    
+    <select id="getIngresa" resultType="pojos.Res" parameterType="int">
+        SELECT 
+        usuario.contraseña
+        FROM usuario
+        WHERE usuario.idusuario = #{id}
+    </select>     
+    
+    <insert id="RegistroU" parameterType = "pojos.Usuario">
+        INSERT INTO usuario (contraseña,nombre,apaterno,amaterno,tel,email,calle,_num,cp,ciudad)
+        VALUES (#{contraseña},#{nombre},#{apaterno},#{amaterno},#{tel},#{email},#{calle},#{_num},#{cp},#{ciudad})
+    </insert>    
+    
+</mapper>
